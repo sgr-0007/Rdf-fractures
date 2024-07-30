@@ -1,13 +1,7 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const rdfRoutes = require('./routes/rdfRoutes');
 const cors = require('cors');
+const familyHistoryRoutes = require('./routes/familyHistoryRoutes');
 
-
-// Load environment variables
-dotenv.config();
-
-// Initialize the app
 const app = express();
 
 // Middleware for parsing JSON bodies
@@ -20,17 +14,17 @@ app.use(cors());
 app.use(express.static('public'));
 
 // Routes
-app.use('/api/rdf', rdfRoutes);
+app.use('/api/familyhistory', familyHistoryRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 // 404 handler
 app.use((req, res, next) => {
-  res.status(404).send('Sorry, we cannot find that!');
+    res.status(404).send('Sorry, we cannot find that!');
 });
 
 module.exports = app;
