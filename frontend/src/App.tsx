@@ -2,7 +2,8 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
-import ChildDetails from './pages/ChildDetails';
+import ChildDetails from './pages/ChildDetailsCapture';
+import RdfDataRender from './pages/RdfDataRender';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/childdetails" element={<ChildDetails />} />
+              <Route path="/rdfdatarender" element={<RdfDataRender />} />
 
       
             </Routes>

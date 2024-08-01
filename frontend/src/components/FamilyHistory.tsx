@@ -11,12 +11,15 @@ import {
     preExistingConditionsOptions,
 } from '../data/FamilyHistoryData';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const FamilyHistory: React.FC = () => {
     type FormData = {
         recordId: string;
         dob: string;
         sex: string;
+        dov: string;
         livesAtHome: string;
         broughtInBy: string;
         safeguarding: string;
@@ -36,10 +39,12 @@ const FamilyHistory: React.FC = () => {
         axios.post('http://localhost:5000/api/familyhistory/insert', data)
          .then((response) => {
               console.log(response);
+              toast.success('Family History data submitted successfully');
             }
             )
             .catch((error) => {
               console.log(error);
+              toast.error('Failed to submit Family History data');
             }
             );
     };
@@ -47,6 +52,7 @@ const FamilyHistory: React.FC = () => {
     return (
         <div className="card shadow-lg compact bg-base-100">
             <div className="card-body">
+                <ToastContainer />
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="form-control">
@@ -86,7 +92,14 @@ const FamilyHistory: React.FC = () => {
                                 ))}
                             </select>
                         </div>
-
+                        <div className="form-control">
+                            <label className="label">Date of Visit</label>
+                            <Controller
+                                control={control}
+                                name="dov"
+                                render={({ field }) => <input type="date" className="input input-bordered" {...field} />}
+                            />
+                        </div>
                         <div className="form-control">
                             <label className="label">Who was with the child when they were brought in?</label>
                             <select className="select select-bordered" {...register('broughtInBy')}>

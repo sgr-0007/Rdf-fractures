@@ -1,5 +1,8 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   skullFractureOptions,
   facialFractureOptions,
@@ -46,10 +49,24 @@ const Fractures: React.FC = () => {
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
         console.log(data);
+        axios.post('http://localhost:5000/api/fractures/insert', data)
+         .then((response) => {
+              console.log(response);
+              toast.success('Fractures data submitted successfully');
+
+            }
+            )
+            .catch((error) => {
+              console.log(error);
+              toast.error('Failed to submit Fractures data');
+
+            }
+            );
     };
     return (
         <div className="card shadow-lg compact bg-base-100">
             <div className="card-body">
+            <ToastContainer />
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="form-control">
