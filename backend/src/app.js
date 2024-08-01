@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const familyHistoryRoutes = require('./routes/familyHistoryRoutes');
+const fracturesRoutes = require('./routes/fracturesRoutes');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/api/familyhistory', familyHistoryRoutes);
+app.use('/api/fractures', fracturesRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

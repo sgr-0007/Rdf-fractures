@@ -6,12 +6,13 @@ const DATASET_URL = 'http://localhost:3030/myRdfDataset';
 
 exports.fetchFamilyHistory = async (req, res) => {
     const query = `
-    PREFIX electrica: <http://purl.org/ELECTRICA/>
+     PREFIX electrica: <http://purl.org/ELECTRICA/>
     SELECT ?subject ?predicate ?object
     WHERE {
         ?subject ?predicate ?object .
+        FILTER(?predicate != <http://purl.org/ELECTRICA/000000413>)
+
     }
-    LIMIT 10
     `;
 
     try {
@@ -29,7 +30,7 @@ exports.fetchFamilyHistory = async (req, res) => {
 
 exports.insertFamilyHistory = async (req, res) => {
     const { recordId, livesAtHome,dob,sex,
-        dateOfVisit, broughtInBy,
+        dov, broughtInBy,
         safeguarding,socialServices,
         hospitalVisits,complaint,history,incidentDate,
         canWalk,preExistingConditions
@@ -43,6 +44,7 @@ exports.insertFamilyHistory = async (req, res) => {
     electrica:${recordId} electrica:000000046 "${dob}"^^xsd:date .
     electrica:${recordId} electrica:000000068 "${sex}"^^xsd:string .
     electrica:${recordId} electrica:000000303 electrica:${livesAtHome} .
+    electrica:${recordId} electrica:000000025 "${dov}"^^xsd:date .
     electrica:${recordId} electrica:000000329 electrica:${broughtInBy} .
     electrica:${recordId} electrica:000000337 "${safeguarding}"^^xsd:boolean .
     electrica:${recordId} electrica:000000302 "${socialServices}"^^xsd:boolean .
