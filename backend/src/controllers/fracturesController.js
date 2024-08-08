@@ -2,18 +2,34 @@ const axios = require('axios');
 
 const electrica = "http://purl.org/ELECTRICA/";
 const xsd = "http://www.w3.org/2001/XMLSchema#";
-const DATASET_URL = 'http://localhost:3030/myRdfDataset';
+const DATASET_URL = 'https://0865-31-205-135-146.ngrok-free.app/myRdfDataset';
 
 
 exports.fetchFractures = async (req, res) => {
 
-    const query = `
-    PREFIX electrica: <http://purl.org/ELECTRICA/>
-   SELECT ?subject ?predicate ?object
-   WHERE {
-       ?subject ?predicate ?object .
-       FILTER(?predicate = <http://purl.org/ELECTRICA/000000413>)
-   }
+    const query = `PREFIX electrica: <http://purl.org/ELECTRICA/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?subject ?mappedPredicate ?mappedObject
+WHERE {
+  # Fetch mappings from the predicateMaster dataset
+  SERVICE <http://localhost:3030/predicateMaster/sparql> {
+    ?predicate ?intermediatePredicate ?mappedPredicate .
+  }
+
+  # Fetch data from the myRdfDataset dataset
+  SERVICE <http://localhost:3030/myRdfDataset/sparql> {
+    ?subject ?predicate ?object .
+    FILTER(?predicate = <http://purl.org/ELECTRICA/000000413>)
+  }  
+
+  # Fetch mappings from the objectMaster dataset
+  SERVICE <http://localhost:3030/objectMaster/sparql> {
+    ?object ?intermediateObjectPredicate ?mappedObject .
+  }
+}
+
+
    `;
 
     try {
@@ -30,7 +46,7 @@ exports.fetchFractures = async (req, res) => {
 }
 
 exports.insertFractures = async (req, res) => {
-    const { 
+    const {
         recordId,
         skullFracture,
         facialFracture,
@@ -51,28 +67,45 @@ exports.insertFractures = async (req, res) => {
         rightLowerLimbFracture
     } = req.body;
 
-    // Manually construct the Turtle data
-    const turtleData = `
+    // Convert array to Turtle URIs
+    const formatArrayAsURIs = (values) => {
+        if (Array.isArray(values)) {
+            return values.map(item => `electrica:${item.value}`).join(", ");
+        }
+        return "";
+    };
+
+    // Helper function to create a Turtle triple if value is not empty
+    const createTriple = (subject, predicate, object) => {
+        if (object != undefined && object != "") {
+            return `electrica:${subject} electrica:${predicate} ${formatArrayAsURIs(object)} .\n`;
+        }
+        return '';
+    };
+
+    // Construct the Turtle data conditionally
+    let turtleData = `
     @prefix electrica: <${electrica}> .
     @prefix xsd: <${xsd}> .    
-    electrica:${recordId} electrica:000000413 electrica:${skullFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${facialFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${cervicalSpineFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${thoracicSpineFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${lumbarSpineFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${sacralSpineFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${leftRibFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${rightRibFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${sternumFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${leftPelvisFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${rightPelvisFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${leftShoulderFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${rightShoulderFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${leftArmFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${rightArmFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${leftLowerLimbFracture} .
-    electrica:${recordId} electrica:000000413 electrica:${rightLowerLimbFracture} .
     `;
+
+    turtleData += createTriple(recordId, '000000413', skullFracture);
+    turtleData += createTriple(recordId, '000000413', facialFracture);
+    turtleData += createTriple(recordId, '000000413', cervicalSpineFracture);
+    turtleData += createTriple(recordId, '000000413', thoracicSpineFracture);
+    turtleData += createTriple(recordId, '000000413', lumbarSpineFracture);
+    turtleData += createTriple(recordId, '000000413', sacralSpineFracture);
+    turtleData += createTriple(recordId, '000000413', leftRibFracture);
+    turtleData += createTriple(recordId, '000000413', rightRibFracture);
+    turtleData += createTriple(recordId, '000000413', sternumFracture);
+    turtleData += createTriple(recordId, '000000413', leftPelvisFracture);
+    turtleData += createTriple(recordId, '000000413', rightPelvisFracture);
+    turtleData += createTriple(recordId, '000000413', leftShoulderFracture);
+    turtleData += createTriple(recordId, '000000413', rightShoulderFracture);
+    turtleData += createTriple(recordId, '000000413', leftArmFracture);
+    turtleData += createTriple(recordId, '000000413', rightArmFracture);
+    turtleData += createTriple(recordId, '000000413', leftLowerLimbFracture);
+    turtleData += createTriple(recordId, '000000413', rightLowerLimbFracture);
 
     console.log('Turtle Data:', turtleData); // Log the turtle data for debugging
 
@@ -93,5 +126,5 @@ exports.insertFractures = async (req, res) => {
         console.error('Error inserting RDF:', error);
         res.status(500).send('Error inserting RDF data');
     }
-};   
+};
 
