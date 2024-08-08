@@ -11,10 +11,10 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT ?subject ?mappedPredicate ?object
 WHERE {
-  SERVICE <http://localhost:3030/predicateMaster/sparql> {
+  SERVICE <https://0865-31-205-135-146.ngrok-free.app/predicateMaster/sparql> {
     ?predicate ?intermediatePredicate ?mappedPredicate .
   }
-  SERVICE <http://localhost:3030/myRdfDataset/sparql> {
+  SERVICE <https://0865-31-205-135-146.ngrok-free.app/myRdfDataset/sparql> {
     ?subject ?predicate ?object .
     FILTER(?predicate != <http://purl.org/ELECTRICA/000000413>)
 

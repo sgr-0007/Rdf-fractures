@@ -13,18 +13,18 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 SELECT ?subject ?mappedPredicate ?mappedObject
 WHERE {
   # Fetch mappings from the predicateMaster dataset
-  SERVICE <http://localhost:3030/predicateMaster/sparql> {
+  SERVICE <https://0865-31-205-135-146.ngrok-free.app/predicateMaster/sparql> {
     ?predicate ?intermediatePredicate ?mappedPredicate .
   }
 
   # Fetch data from the myRdfDataset dataset
-  SERVICE <http://localhost:3030/myRdfDataset/sparql> {
+  SERVICE <https://0865-31-205-135-146.ngrok-free.app/myRdfDataset/sparql> {
     ?subject ?predicate ?object .
     FILTER(?predicate = <http://purl.org/ELECTRICA/000000413>)
   }  
 
   # Fetch mappings from the objectMaster dataset
-  SERVICE <http://localhost:3030/objectMaster/sparql> {
+  SERVICE <https://0865-31-205-135-146.ngrok-free.app/objectMaster/sparql> {
     ?object ?intermediateObjectPredicate ?mappedObject .
   }
 }
