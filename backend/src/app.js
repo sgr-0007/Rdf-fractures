@@ -9,8 +9,11 @@ const app = express();
 app.use(express.json());
 
 // Additional middleware
-app.use(cors());
-
+app.use(cors({
+    origin: 'https://rdf-fractures.pages.dev',
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization'
+}));
 // Static file serving (optional, if you need to serve static files)
 app.use(express.static('public'));
 

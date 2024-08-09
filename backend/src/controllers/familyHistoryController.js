@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const electrica = "http://purl.org/ELECTRICA/";
 const xsd = "http://www.w3.org/2001/XMLSchema#";
-const DATASET_URL = 'http://localhost:3030/myRdfDataset';
+const DATASET_URL = 'https://0865-31-205-135-146.ngrok-free.app/myRdfDataset';
 
 exports.fetchFamilyHistory = async (req, res) => {
     const query = `
