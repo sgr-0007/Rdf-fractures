@@ -7,7 +7,7 @@ const FracturesTable: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.post('http://localhost:5000/api/fractures/fetch')
+        axios.post('https://rdf-fractures.onrender.com/api/fractures/fetch')
             .then(response => {
                 setData(response.data.results.bindings);
                 setLoading(false);
@@ -27,6 +27,11 @@ const FracturesTable: React.FC = () => {
         return <div>{error}</div>;
     }
 
+    const getSubject = (value: string) => {
+        const extractedValue = value.split('/').pop();
+        return extractedValue
+    }
+
     return (
         <div className="bg-white rounded-lg shadow-md overflow-x-auto">
             <table className="table table-zebra">
@@ -40,9 +45,9 @@ const FracturesTable: React.FC = () => {
                 <tbody>
                     {data.map((item, index) => (
                         <tr key={index}>
-                            <td>{item.subject.value}</td>
-                            <td>{item.predicate.value}</td>
-                            <td>{item.object.value}</td>
+                            <td>{getSubject(item.subject.value)}</td>
+                            <td>{item.mappedPredicate.value}</td>
+                            <td>{item.mappedObject.value}</td>
                         </tr>
                     ))}
                 </tbody>

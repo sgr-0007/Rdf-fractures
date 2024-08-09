@@ -10,7 +10,7 @@ const RdfDataRender: React.FC = () => {
             </h2>
             <FamilyHistoryTable />
         </div>
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="bg-white rounded-lg shadow-md p-6 py-8">
             <h2 className="text-xl font-bold mb-4">Fractures</h2>
             <FracturesTable />
         </div>

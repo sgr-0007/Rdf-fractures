@@ -1,5 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {
+    sexOptions,
+    livesAtHomeOptions,
+    broughtInByOptions,
+    safeguardingOptions,
+    socialServicesOptions,
+    complaintOptions,
+    canWalkOptions,
+    preExistingConditionsOptions,
+    FamilyHistoryOption
+} from '../data/FamilyHistoryData';
+
+// Combine all options into a single array
+const options: FamilyHistoryOption[] = [
+    ...sexOptions,
+    ...livesAtHomeOptions,
+    ...broughtInByOptions,
+    ...safeguardingOptions,
+    ...socialServicesOptions,
+    ...complaintOptions,
+    ...canWalkOptions,
+    ...preExistingConditionsOptions
+];
+
+// Create a mapping from value to label
+const labelMap = options.reduce((acc, option) => {
+    acc[option.value] = option.label;
+    return acc;
+}, {} as { [key: string]: string });
 
 const FamilyHistoryTable: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
@@ -7,7 +36,7 @@ const FamilyHistoryTable: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.post('http://localhost:5000/api/familyhistory/fetch')
+        axios.post('https://rdf-fractures.onrender.com/api/familyhistory/fetch')
             .then(response => {
                 setData(response.data.results.bindings);
                 setLoading(false);
@@ -27,6 +56,15 @@ const FamilyHistoryTable: React.FC = () => {
         return <div>{error}</div>;
     }
 
+    const getLabel = (value: string) => {
+        const extractedValue = value.split('/').pop();
+        return extractedValue ? labelMap[extractedValue] || extractedValue : value;
+    };
+
+    const getSubject = (value: string) => {
+        return value.split('/').pop();
+    };
+
     return (
         <div className="bg-white rounded-lg shadow-md overflow-x-auto">
             <table className="table table-zebra">
@@ -40,9 +78,9 @@ const FamilyHistoryTable: React.FC = () => {
                 <tbody>
                     {data.map((item, index) => (
                         <tr key={index}>
-                            <td>{item.subject.value}</td>
-                            <td>{item.predicate.value}</td>
-                            <td>{item.object.value}</td>
+                            <td>{getSubject(item.subject.value)}</td>
+                            <td>{item.mappedPredicate.value}</td>
+                            <td>{getLabel(item.object.value)}</td>
                         </tr>
                     ))}
                 </tbody>
