@@ -18,7 +18,6 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/childdetails" element={<ChildDetails />} />
               <Route path="/rdfdatarender" element={<RdfDataRender />} />
-
       
             </Routes>
           </div>
