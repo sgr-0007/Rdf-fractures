@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const electrica = "http://purl.org/ELECTRICA/";
 const xsd = "http://www.w3.org/2001/XMLSchema#";
-const DATASET_URL = 'https://0865-31-205-135-146.ngrok-free.app/myRdfDataset';
+const DATASET_URL = 'https://fd89-31-205-135-233.ngrok-free.app/myRdfDataset';
 
 exports.fetchFamilyHistory = async (req, res) => {
     const query = `
@@ -11,10 +11,10 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT ?subject ?mappedPredicate ?object
 WHERE {
-  SERVICE <https://0865-31-205-135-146.ngrok-free.app/predicateMaster/sparql> {
+  SERVICE <https://fd89-31-205-135-233.ngrok-free.app/predicateMaster/sparql> {
     ?predicate ?intermediatePredicate ?mappedPredicate .
   }
-  SERVICE <https://0865-31-205-135-146.ngrok-free.app/myRdfDataset/sparql> {
+  SERVICE <https://fd89-31-205-135-233.ngrok-free.app/myRdfDataset/sparql> {
     ?subject ?predicate ?object .
     FILTER(?predicate != <http://purl.org/ELECTRICA/000000413>)
 
