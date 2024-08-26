@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Additional middleware
 app.use(cors({
-    origin: 'https://rdf-fractures.pages.dev',
+    origin: '*',
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization'
 }));
