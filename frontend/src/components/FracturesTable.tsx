@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Lottie from 'react-lottie';
+import animationData from '../assets/loaderlottie.json';
 
 const FracturesTable: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        renderer: 'svg',
+    };
 
     useEffect(() => {
         axios.post('https://rdf-fractures.onrender.com/api/fractures/fetch')
@@ -20,7 +29,12 @@ const FracturesTable: React.FC = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>
+        <Lottie options={defaultOptions}
+            height={100}
+            width={100}
+        />
+    </div>;
     }
 
     if (error) {

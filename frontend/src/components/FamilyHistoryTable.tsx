@@ -11,6 +11,8 @@ import {
     preExistingConditionsOptions,
     FamilyHistoryOption
 } from '../data/FamilyHistoryData';
+import Lottie from 'react-lottie';
+import animationData from '../assets/loaderlottie.json';
 
 // Combine all options into a single array
 const options: FamilyHistoryOption[] = [
@@ -23,7 +25,12 @@ const options: FamilyHistoryOption[] = [
     ...canWalkOptions,
     ...preExistingConditionsOptions
 ];
-
+const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    renderer: 'svg',
+};
 // Create a mapping from value to label
 const labelMap = options.reduce((acc, option) => {
     acc[option.value] = option.label;
@@ -49,7 +56,12 @@ const FamilyHistoryTable: React.FC = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>
+            <Lottie options={defaultOptions}
+                height={100}
+                width={100}
+            />
+        </div>;
     }
 
     if (error) {
