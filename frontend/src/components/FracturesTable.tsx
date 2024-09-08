@@ -16,9 +16,17 @@ const FracturesTable: React.FC = () => {
     };
 
     useEffect(() => {
-        axios.post('https://rdf-fractures.onrender.com/api/fractures/fetch')
+        axios.post('http://localhost:5000/api/fractures/fetch')
             .then(response => {
-                setData(response.data.results.bindings);
+                // Sort the data by recordId (extracted from subject)
+                const sortedData = response.data.results.bindings.sort((a: any, b: any) => {
+                    const recordIdA = a.subject.value.split('/').pop();
+                    const recordIdB = b.subject.value.split('/').pop();
+                    return recordIdA.localeCompare(recordIdB);
+                   
+                });
+
+                setData(sortedData);
                 setLoading(false);
             })
             .catch(error => {
@@ -30,11 +38,11 @@ const FracturesTable: React.FC = () => {
 
     if (loading) {
         return <div>
-        <Lottie options={defaultOptions}
-            height={100}
-            width={100}
-        />
-    </div>;
+            <Lottie options={defaultOptions}
+                height={100}
+                width={100}
+            />
+        </div>;
     }
 
     if (error) {
@@ -43,7 +51,7 @@ const FracturesTable: React.FC = () => {
 
     const getSubject = (value: string) => {
         const extractedValue = value.split('/').pop();
-        return extractedValue
+        return extractedValue;
     }
 
     return (
@@ -69,6 +77,5 @@ const FracturesTable: React.FC = () => {
         </div>
     );
 };
-
 
 export default FracturesTable;

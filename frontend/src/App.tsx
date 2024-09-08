@@ -4,11 +4,13 @@ import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
 import ChildDetails from './pages/ChildDetailsCapture';
 import RdfDataRender from './pages/RdfDataRender';
-
+import { RecordIdProvider } from './hooks/RecordIdContext';
 
 function App() {
 
   return (
+    <RecordIdProvider>
+
     <Router>
       <div className="flex flex-col h-screen w-screen overflow-hidden">
         <Header />
@@ -24,6 +26,7 @@ function App() {
         </div>
       </div>
     </Router>
+    </RecordIdProvider>
   )
 }
 

@@ -4,6 +4,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRecordId } from '../hooks/RecordIdContext';
 
 import {
     skullFractureOptions,
@@ -47,18 +48,24 @@ type FormData = {
 };
 
 const Fractures: React.FC = () => {
-    const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>();
+    const {handleSubmit, control, reset } = useForm<FormData>();
     const [step, setStep] = useState(1);
+    const { recordId } = useRecordId(); // Use context to get the recordId
 
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
 
+    
+
     const onSubmit: SubmitHandler<FormData> = (data) => {
         console.log(data);
-        axios.post('https://rdf-fractures.onrender.com/api/fractures/insert', data)
+        data.recordId = recordId;
+        axios.post('http://localhost:5000/api/fractures/insert', data)
             .then((response) => {
                 console.log(response);
                 toast.dark('Fractures data submitted successfully');
+                reset();
+                setStep(1);
             })
             .catch((error) => {
                 console.log(error);
@@ -104,15 +111,7 @@ const Fractures: React.FC = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-4">
                     {step === 1 && (
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                            <div className="form-control">
-                                <label className="label">Record ID</label>
-                                <input
-                                    className="input input-bordered"
-                                    {...register('recordId', { required: 'Record ID is required' })}
-                                />
-                                {errors.recordId && <span className="text-red-500">{errors.recordId.message}</span>}
-                            </div>
-
+                        
                             <div className="form-control">
                                 <label className="label">Where is the fracture on the skull bone</label>
                                 <Controller
@@ -150,16 +149,6 @@ const Fractures: React.FC = () => {
                                     )}
                                 />
                             </div>
-
-                            <div className="flex justify-between">
-                                <button type="button" className="bg-black text-white py-2 px-4 rounded shadow-md hover:bg-gray-800" onClick={nextStep}>Next</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {step === 2 && (
-                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-
                             <div className="form-control">
                                 <label className="label">If the fracture is in the cervical spine, select the bone from the list below</label>
                                 <Controller
@@ -178,6 +167,16 @@ const Fractures: React.FC = () => {
                                     )}
                                 />
                             </div>
+                            <div className="flex justify-between">
+                                <button type="button" className="bg-black text-white py-2 px-4 rounded shadow-md hover:bg-gray-800" onClick={nextStep}>Next</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {step === 2 && (
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+
+                            
 
                             <div className="form-control">
                                 <label className="label">If the fracture is in the thoracic spine, select the bone from the list below</label>
@@ -217,15 +216,6 @@ const Fractures: React.FC = () => {
                                 />
                             </div>
 
-                            <div className="flex justify-between">
-                                <button type="button" className="bg-gray-500 text-white py-2 px-4 rounded shadow-md hover:bg-gray-700" onClick={prevStep}>Previous</button>
-                                <button type="button" className="bg-black text-white py-2 px-4 rounded shadow-md hover:bg-gray-800" onClick={nextStep}>Next</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {step === 3 && (
-                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
 
                             <div className="form-control">
                                 <label className="label">If the fracture is in the sacral spine or coccyx, select the bone from the list below</label>
@@ -245,6 +235,16 @@ const Fractures: React.FC = () => {
                                     )}
                                 />
                             </div>
+                            <div className="flex justify-between">
+                                <button type="button" className="bg-gray-500 text-white py-2 px-4 rounded shadow-md hover:bg-gray-700" onClick={prevStep}>Previous</button>
+                                <button type="button" className="bg-black text-white py-2 px-4 rounded shadow-md hover:bg-gray-800" onClick={nextStep}>Next</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {step === 3 && (
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+
 
                             <div className="form-control">
                                 <label className="label">If the fracture is in the left ribs, select the specific rib location from the list below</label>
@@ -283,17 +283,6 @@ const Fractures: React.FC = () => {
                                     )}
                                 />
                             </div>
-
-                            <div className="flex justify-between">
-                                <button type="button" className="bg-gray-500 text-white py-2 px-4 rounded shadow-md hover:bg-gray-700" onClick={prevStep}>Previous</button>
-                                <button type="button" className="bg-black text-white py-2 px-4 rounded shadow-md hover:bg-gray-800" onClick={nextStep}>Next</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {step === 4 && (
-                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-
                             <div className="form-control">
                                 <label className="label">If the fracture is in the left pelvis, select the specific bone from the list below</label>
                                 <Controller
@@ -312,6 +301,17 @@ const Fractures: React.FC = () => {
                                     )}
                                 />
                             </div>
+                            <div className="flex justify-between">
+                                <button type="button" className="bg-gray-500 text-white py-2 px-4 rounded shadow-md hover:bg-gray-700" onClick={prevStep}>Previous</button>
+                                <button type="button" className="bg-black text-white py-2 px-4 rounded shadow-md hover:bg-gray-800" onClick={nextStep}>Next</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {step === 4 && (
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+
+                            
 
                             <div className="form-control">
                                 <label className="label">If the fracture is in the right pelvis, select the specific bone from the list below</label>

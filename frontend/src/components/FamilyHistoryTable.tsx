@@ -43,9 +43,16 @@ const FamilyHistoryTable: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.post('https://rdf-fractures.onrender.com/api/familyhistory/fetch')
+        axios.post('http://localhost:5000/api/familyhistory/fetch')
             .then(response => {
-                setData(response.data.results.bindings);
+                const sortedData = response.data.results.bindings.sort((a: any, b: any) => {
+                    const recordIdA = a.subject.value.split('/').pop();
+                    const recordIdB = b.subject.value.split('/').pop();
+                    return recordIdA.localeCompare(recordIdB);
+                   
+                });
+
+                setData(sortedData);
                 setLoading(false);
             })
             .catch(error => {
