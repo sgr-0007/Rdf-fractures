@@ -2,35 +2,36 @@ const axios = require('axios');
 
 const electrica = "http://purl.org/ELECTRICA/";
 const xsd = "http://www.w3.org/2001/XMLSchema#";
-const DATASET_URL = 'https://40a2-79-79-107-165.ngrok-free.app/myRdfDataset';
+const DATASET_URL = 'http://localhost:3030/myRdfDataset';
+const OBJDATASET_URL = 'http://localhost:3030/objectMaster';
+const PREDDATASET_URL = 'http://localhost:3030/predicateMaster';
+const predicateURI = 'http://purl.org/ELECTRICA/000000413';
+
 
 
 exports.fetchFractures = async (req, res) => {
 
-    const query = `PREFIX electrica: <http://purl.org/ELECTRICA/>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-
-SELECT ?subject ?mappedPredicate ?mappedObject
-WHERE {
-  # Fetch mappings from the predicateMaster dataset
-  SERVICE <https://40a2-79-79-107-165.ngrok-free.app/predicateMaster/sparql> {
-    ?predicate ?intermediatePredicate ?mappedPredicate .
-  }
-
-  # Fetch data from the myRdfDataset dataset
-  SERVICE <https://40a2-79-79-107-165.ngrok-free.app/myRdfDataset/sparql> {
-    ?subject ?predicate ?object .
-    FILTER(?predicate = <http://purl.org/ELECTRICA/000000413>)
-  }  
-
-  # Fetch mappings from the objectMaster dataset
-  SERVICE <https://40a2-79-79-107-165.ngrok-free.app/objectMaster/sparql> {
-    ?object ?intermediateObjectPredicate ?mappedObject .
-  }
-}
-
-
-   `;
+    const query = `PREFIX electrica: <${DATASET_URL}>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    
+    SELECT ?subject ?mappedPredicate ?mappedObject
+    WHERE {
+      # Fetch mappings from the predicateMaster dataset
+      SERVICE <${PREDDATASET_URL}/sparql> {
+        ?predicate ?intermediatePredicate ?mappedPredicate .
+      }
+    
+      # Fetch data from the myRdfDataset dataset
+      SERVICE <${DATASET_URL}/sparql> {
+        ?subject ?predicate ?object .
+        FILTER(?predicate = <${predicateURI}>)
+      }  
+    
+      # Fetch mappings from the objectMaster dataset
+      SERVICE <${OBJDATASET_URL}/sparql> {
+        ?object ?intermediateObjectPredicate ?mappedObject .
+      }
+    }`;
 
     try {
         const response = await axios.post(`${DATASET_URL}/sparql`, query, {
@@ -107,7 +108,7 @@ exports.insertFractures = async (req, res) => {
     turtleData += createTriple(recordId, '000000413', leftLowerLimbFracture);
     turtleData += createTriple(recordId, '000000413', rightLowerLimbFracture);
 
-    console.log('Turtle Data:', turtleData); // Log the turtle data for debugging
+    console.log('Turtle Data:', turtleData); 
 
     try {
         const response = await axios.post(`${DATASET_URL}/data`, turtleData, {
