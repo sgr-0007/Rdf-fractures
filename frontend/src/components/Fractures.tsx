@@ -113,7 +113,7 @@ const Fractures: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                         
                             <div className="form-control">
-                                <label className="label">Where is the fracture on the skull bone</label>
+                                <label className="label" htmlFor='skull-select'>Where is the fracture on the skull bone</label>
                                 <Controller
                                     control={control}
                                     name="skullFracture"
@@ -121,11 +121,13 @@ const Fractures: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='skull-select'
                                             closeMenuOnSelect={false}
                                             options={skullFractureOptions}
                                             styles={customStyles}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
+                                            aria-label='Where is the fracture on the skull bone'
                                         />
                                     )}
                                 />
@@ -179,7 +181,7 @@ const Fractures: React.FC = () => {
                             
 
                             <div className="form-control">
-                                <label className="label">If the fracture is in the thoracic spine, select the bone from the list below</label>
+                                <label className="label" htmlFor='thoracic-select'>If the fracture is in the thoracic spine, select the bone from the list below</label>
                                 <Controller
                                     control={control}
                                     name="thoracicSpineFracture"
@@ -187,11 +189,13 @@ const Fractures: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='thoracic-select'
                                             closeMenuOnSelect={false}
                                             options={thoracicSpineFractureOptions}
                                             styles={customStyles}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
+                                            aria-label='If the fracture is in the thoracic spine'
                                         />
                                     )}
                                 />
@@ -247,7 +251,7 @@ const Fractures: React.FC = () => {
 
 
                             <div className="form-control">
-                                <label className="label">If the fracture is in the left ribs, select the specific rib location from the list below</label>
+                                <label className="label" htmlFor='leftrib-select'>If the fracture is in the left ribs, select the specific rib location from the list below</label>
                                 <Controller
                                     control={control}
                                     name="leftRibFracture"
@@ -255,11 +259,13 @@ const Fractures: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='leftrib-select'
                                             closeMenuOnSelect={false}
                                             options={leftRibFractureOptions}
                                             styles={customStyles}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
+                                            aria-label='If the fracture is in the left ribs'
                                         />
                                     )}
                                 />
@@ -314,7 +320,7 @@ const Fractures: React.FC = () => {
                             
 
                             <div className="form-control">
-                                <label className="label">If the fracture is in the right pelvis, select the specific bone from the list below</label>
+                                <label className="label" htmlFor='rightpelvis-select'>If the fracture is in the right pelvis, select the specific bone from the list below</label>
                                 <Controller
                                     control={control}
                                     name="rightPelvisFracture"
@@ -322,11 +328,13 @@ const Fractures: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='rightpelvis-select'
                                             closeMenuOnSelect={false}
                                             options={rightPelvisFractureOptions}
                                             styles={customStyles}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
+                                            aria-label='If the fracture is in the right pelvis'
                                         />
                                     )}
                                 />
@@ -381,7 +389,7 @@ const Fractures: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
 
                             <div className="form-control">
-                                <label className="label">If the fracture is in the right shoulder girdle, select the specific bone from the list below</label>
+                                <label className="label" htmlFor='rightshoulder-select'>If the fracture is in the right shoulder girdle, select the specific bone from the list below</label>
                                 <Controller
                                     control={control}
                                     name="rightShoulderFracture"
@@ -389,11 +397,13 @@ const Fractures: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='rightshoulder-select'
                                             closeMenuOnSelect={false}
                                             options={rightShoulderFractureOptions}
                                             styles={customStyles}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
+                                            aria-label='If the fracture is in the right shoulder girdle'
                                         />
                                     )}
                                 />
@@ -448,7 +458,7 @@ const Fractures: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
 
                             <div className="form-control">
-                                <label className="label">If the fracture is in the left lower limb, select the specific bone from below</label>
+                                <label className="label" htmlFor='leftlimb-select'>If the fracture is in the left lower limb, select the specific bone from below</label>
                                 <Controller
                                     control={control}
                                     name="leftLowerLimbFracture"
@@ -456,11 +466,13 @@ const Fractures: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='leftlimb-select'
                                             closeMenuOnSelect={false}
                                             options={leftLowerLimbFractureOptions}
                                             styles={customStyles}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
+                                            aria-label='If the fracture is in the left lower limb'
                                         />
                                     )}
                                 />

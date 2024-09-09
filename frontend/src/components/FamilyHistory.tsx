@@ -36,7 +36,7 @@ const FamilyHistory: React.FC = () => {
         preExistingConditions: { value: string; label: string }[];
     };
 
-    const { register, handleSubmit, control, reset} = useForm<FormData>();
+    const { register, handleSubmit, control, reset } = useForm<FormData>();
     const [step, setStep] = useState(1);
     const { setRecordId } = useRecordId();
     const nextStep = () => setStep((prev) => prev + 1);
@@ -46,7 +46,7 @@ const FamilyHistory: React.FC = () => {
         const uniquePart = Math.random().toString(36).substr(2, 9).toUpperCase(); // Generate a random string and convert to uppercase
         return `RAFCE${uniquePart}`;
     };
-    
+
     const onSubmit: SubmitHandler<FormData> = (data) => {
         console.log(data);
         const generatedRecordId = generateRecordId();
@@ -66,12 +66,12 @@ const FamilyHistory: React.FC = () => {
             });
     };
     const customStyles = {
-        
+
         singleValue: (provided: any) => ({
             ...provided,
             color: 'black'
         }),
-        
+
         option: (provided: any, state: any) => ({
             ...provided,
             backgroundColor: state.isSelected ? 'black' : state.isFocused ? 'gray' : 'white',
@@ -104,31 +104,42 @@ const FamilyHistory: React.FC = () => {
                     {step === 1 && (
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                             <div className="form-control">
-                                <label className="label">Date of Birth</label>
+                                <label className="label" htmlFor="dob">
+                                    Date of Birth
+                                </label>
                                 <Controller
                                     control={control}
                                     name="dob"
-                                    render={({ field }) => <input type="date" className="input input-bordered" {...field} />}
+                                    render={({ field }) => (
+                                        <input
+                                            id="dob" // Add the id to match the label's htmlFor attribute
+                                            type="date"
+                                            className="input input-bordered"
+                                            {...field}
+                                        />
+                                    )}
                                 />
                             </div>
                             <div className="form-control">
-                                <label className="label">Sex</label>
+                                <label className="label" htmlFor="sex-select">Sex</label>
                                 <Controller
                                     control={control}
                                     name="sex"
                                     render={({ field }) => (
                                         <Select
                                             {...field}
+                                            inputId="sex-select"  // Unique id for linking the label
                                             options={sexOptions}
                                             onChange={(selectedOption) => field.onChange(selectedOption)}
                                             value={field.value}
                                             styles={customStyles}
+                                            aria-label="Sex" // Direct aria-label for testing and accessibility
                                         />
                                     )}
                                 />
                             </div>
                             <div className="form-control">
-                                <label className="label">Who lives at home with the patient?</label>
+                                <label className="label" htmlFor='wholives-select'>Who lives at home with the patient?</label>
                                 <Controller
                                     control={control}
                                     name="livesAtHome"
@@ -136,11 +147,13 @@ const FamilyHistory: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='wholives-select'
                                             closeMenuOnSelect={false}
                                             options={livesAtHomeOptions}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
                                             styles={customStyles}
+                                            aria-label='who lives at home' // Direct aria-label for testing and accessibility
 
                                         />
                                     )}
@@ -154,17 +167,17 @@ const FamilyHistory: React.FC = () => {
                     )}
                     {step === 2 && (
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                           
+
                             <div className="form-control">
-                                <label className="label">Date of Visit</label>
+                                <label className="label" htmlFor='dov'>Date of Visit</label>
                                 <Controller
                                     control={control}
                                     name="dov"
-                                    render={({ field }) => <input type="date" className="input input-bordered" {...field} />}
+                                    render={({ field }) => <input id='dov' type="date" className="input input-bordered" {...field} />}
                                 />
                             </div>
                             <div className="form-control">
-                                <label className="label">Who was with the child when they were brought in?</label>
+                                <label className="label" htmlFor='broughtinby-select'>Who was with the child when they were brought in?</label>
                                 <Controller
                                     control={control}
                                     name="broughtInBy"
@@ -172,11 +185,13 @@ const FamilyHistory: React.FC = () => {
                                         <Select
                                             {...field}
                                             isMulti
+                                            inputId='broughtinby-select'
                                             closeMenuOnSelect={false}
                                             options={broughtInByOptions}
                                             onChange={(selectedOptions) => field.onChange(selectedOptions)}
                                             value={field.value}
                                             styles={customStyles}
+                                            aria-label='who was with the child' // Direct aria-label for testing and accessibility
 
                                         />
                                     )}
@@ -206,26 +221,28 @@ const FamilyHistory: React.FC = () => {
                     )}
                     {step === 3 && (
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                           
+
                             <div className="form-control">
-                                <label className="label">Is the family known to Social Services?</label>
+                                <label className="label" htmlFor='socialservices-select'>Is the family known to Social Services?</label>
                                 <Controller
                                     control={control}
                                     name="socialServices"
                                     render={({ field }) => (
                                         <Select
                                             {...field}
+                                            inputId='socialservices-select'
                                             options={socialServicesOptions}
                                             onChange={(selectedOption) => field.onChange(selectedOption)}
                                             value={field.value}
                                             styles={customStyles}
+                                            aria-label='Is the family known' // Direct aria-label for testing and accessibility
                                         />
                                     )}
                                 />
                             </div>
                             <div className="form-control">
-                                <label className="label">Total number of hospital visits since birth</label>
-                                <input type="number" className="input input-bordered" {...register('hospitalVisits')} />
+                                <label className="label" htmlFor='hospitalvisits'>Total number of hospital visits since birth</label>
+                                <input id='hospitalvisits' type="number" className="input input-bordered" {...register('hospitalVisits')} />
                             </div>
                             <div className="form-control">
                                 <label className="label">Presenting complaint for the current hospital visit</label>
@@ -254,31 +271,33 @@ const FamilyHistory: React.FC = () => {
                     )}
                     {step === 4 && (
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                            
+
                             <div className="form-control">
-                                <label className="label">History</label>
-                                <textarea className="textarea textarea-bordered" {...register('history')} />
+                                <label className="label" htmlFor='History'>History</label>
+                                <textarea id='History' className="textarea textarea-bordered" {...register('history')} />
                             </div>
                             <div className="form-control">
-                                <label className="label">When did this incident happen/when was the issue first noticed?</label>
+                                <label className="label" htmlFor='incidentdate'>When did this incident happen/when was the issue first noticed?</label>
                                 <Controller
                                     control={control}
                                     name="incidentDate"
-                                    render={({ field }) => <input type="date" className="input input-bordered" {...field} />}
+                                    render={({ field }) => <input id='incidentdate' type="date" className="input input-bordered" {...field} />}
                                 />
                             </div>
                             <div className="form-control">
-                                <label className="label">Is the child normally able to walk/cruise?</label>
+                                <label className="label" htmlFor='walk-select'>Is the child normally able to walk/cruise?</label>
                                 <Controller
                                     control={control}
                                     name="canWalk"
                                     render={({ field }) => (
                                         <Select
                                             {...field}
+                                            inputId='walk-select'
                                             options={canWalkOptions}
                                             onChange={(selectedOption) => field.onChange(selectedOption)}
                                             value={field.value}
                                             styles={customStyles}
+                                            aria-label='Is the child normally able to walk or cruise' // Direct aria-label for testing and accessibility
                                         />
                                     )}
                                 />
@@ -308,7 +327,7 @@ const FamilyHistory: React.FC = () => {
                             </div>
                         </div>
                     )}
-                    
+
                 </form>
             </div>
         </div>
