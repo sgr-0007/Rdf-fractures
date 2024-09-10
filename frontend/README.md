@@ -125,8 +125,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 For any inquiries or further information, feel free to reach out:
 
-- **Name**: [Your Name]
-- **Email**: your-email@example.com
+- **Name**: [Sagar HS]
+- **Email**: sagarhs0007@gmail.com
 - **GitHub**: [sgr-0007](https://github.com/sgr-0007)
 
 ---
