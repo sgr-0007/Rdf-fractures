@@ -1,4 +1,4 @@
-# RDF-Based tool for Recording Fractures in Suspected Child Abuse Cases
+# RDF-Based tool for Recording Fractures in Suspected Child Abuse
 
 [Client App](https://github.com/sgr-0007/Rdf-fractures/tree/main/frontend) | [Server](https://github.com/sgr-0007/Rdf-fractures/tree/main/backend)
 
