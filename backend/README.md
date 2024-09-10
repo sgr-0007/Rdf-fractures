@@ -8,7 +8,7 @@ This project is the backend part of the RDF-Based Form for Recording Fractures i
 2. Navigate to the `backend` directory.
 3. Run `npm install` to install dependencies.
 4. Create a `.env` file and set the necessary environment variables.
-5. Run `npm start` to start the server.
+5. Run `node server.js` to start the server.
 
 ## Directory Structure
 
