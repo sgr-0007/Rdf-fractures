@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Lottie from 'react-lottie';  // Import Lottie
+import animationData from '../assets/loaderlottie.json';  // Your Lottie animation JSON
 import {
     sexOptions,
     livesAtHomeOptions,
@@ -11,10 +13,7 @@ import {
     preExistingConditionsOptions,
     FamilyHistoryOption
 } from '../data/FamilyHistoryData';
-import Lottie from 'react-lottie';
-import animationData from '../assets/loaderlottie.json';
 
-// Combine all options into a single array
 const options: FamilyHistoryOption[] = [
     ...sexOptions,
     ...livesAtHomeOptions,
@@ -25,34 +24,47 @@ const options: FamilyHistoryOption[] = [
     ...canWalkOptions,
     ...preExistingConditionsOptions
 ];
-const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    renderer: 'svg',
-};
+
 // Create a mapping from value to label
 const labelMap = options.reduce((acc, option) => {
     acc[option.value] = option.label;
     return acc;
 }, {} as { [key: string]: string });
 
-const FamilyHistoryTable: React.FC = () => {
+const getLabel = (value: string) => {
+    const extractedValue = value.split('/').pop();
+    return extractedValue ? labelMap[extractedValue] || extractedValue : value;
+};
+
+const getSubject = (value: string) => {
+    return value.split('/').pop();
+};
+
+const FamilyHistoryTable: React.FC<{ onDataFetched: (data: any[]) => void }> = ({ onDataFetched }) => {
     const [data, setData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Lottie options for the animation
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
+
     useEffect(() => {
         axios.post('http://localhost:5000/api/familyhistory/fetch')
             .then(response => {
-                const sortedData = response.data.results.bindings.sort((a: any, b: any) => {
-                    const recordIdA = a.subject.value.split('/').pop();
-                    const recordIdB = b.subject.value.split('/').pop();
-                    return recordIdA.localeCompare(recordIdB);
-                   
-                });
-
-                setData(sortedData);
+                const fetchedData = response.data.results.bindings.map((item: any) => ({
+                    subject: getSubject(item.subject.value),
+                    predicate: item.mappedPredicate.value,
+                    object: getLabel(item.object.value),
+                }));
+                setData(fetchedData);
+                onDataFetched(fetchedData); // Pass data up to parent
                 setLoading(false);
             })
             .catch(error => {
@@ -60,33 +72,23 @@ const FamilyHistoryTable: React.FC = () => {
                 setError('Error fetching data');
                 setLoading(false);
             });
-    }, []);
+    }, [onDataFetched]);
 
     if (loading) {
-        return <div>
-            <Lottie options={defaultOptions}
-                height={100}
-                width={100}
-            />
-        </div>;
+        return (
+            <div className="flex justify-center items-center">
+                <Lottie options={defaultOptions} height={150} width={150} />
+            </div>
+        );
     }
 
     if (error) {
         return <div>{error}</div>;
     }
 
-    const getLabel = (value: string) => {
-        const extractedValue = value.split('/').pop();
-        return extractedValue ? labelMap[extractedValue] || extractedValue : value;
-    };
-
-    const getSubject = (value: string) => {
-        return value.split('/').pop();
-    };
-
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-x-auto">
-            <table className="table table-zebra">
+        <div className="bg-white rounded-lg shadow-md overflow-x-auto p-4">
+            <table className="table table-zebra mb-4">
                 <thead>
                     <tr>
                         <th>Subject</th>
@@ -97,9 +99,9 @@ const FamilyHistoryTable: React.FC = () => {
                 <tbody>
                     {data.map((item, index) => (
                         <tr key={index}>
-                            <td>{getSubject(item.subject.value)}</td>
-                            <td>{item.mappedPredicate.value}</td>
-                            <td>{getLabel(item.object.value)}</td>
+                            <td>{item.subject}</td>
+                            <td>{item.predicate}</td>
+                            <td>{item.object}</td>
                         </tr>
                     ))}
                 </tbody>

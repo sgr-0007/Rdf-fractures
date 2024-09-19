@@ -3,7 +3,11 @@ import axios from 'axios';
 import Lottie from 'react-lottie';
 import animationData from '../assets/loaderlottie.json';
 
-const FracturesTable: React.FC = () => {
+interface FracturesTableProps {
+    onDataFetched: (data: any[]) => void; // Callback to pass data to the parent
+}
+
+const FracturesTable: React.FC<FracturesTableProps> = ({ onDataFetched }) => {
     const [data, setData] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -23,10 +27,10 @@ const FracturesTable: React.FC = () => {
                     const recordIdA = a.subject.value.split('/').pop();
                     const recordIdB = b.subject.value.split('/').pop();
                     return recordIdA.localeCompare(recordIdB);
-                   
                 });
 
                 setData(sortedData);
+                onDataFetched(sortedData); // Pass data up to parent component
                 setLoading(false);
             })
             .catch(error => {
@@ -34,15 +38,14 @@ const FracturesTable: React.FC = () => {
                 setError('Error fetching data');
                 setLoading(false);
             });
-    }, []);
+    }, [onDataFetched]);
 
     if (loading) {
-        return <div>
-            <Lottie options={defaultOptions}
-                height={100}
-                width={100}
-            />
-        </div>;
+        return (
+            <div>
+                <Lottie options={defaultOptions} height={100} width={100} />
+            </div>
+        );
     }
 
     if (error) {
@@ -52,14 +55,14 @@ const FracturesTable: React.FC = () => {
     const getSubject = (value: string) => {
         const extractedValue = value.split('/').pop();
         return extractedValue;
-    }
+    };
 
     return (
         <div className="bg-white rounded-lg shadow-md overflow-x-auto">
             <table className="table table-zebra">
                 <thead>
                     <tr>
-                        <th>Subject</th>
+                        <th>Record ID</th>
                         <th>Predicate</th>
                         <th>Object</th>
                     </tr>
