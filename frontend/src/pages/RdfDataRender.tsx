@@ -48,10 +48,12 @@ const RdfDataRender: React.FC = () => {
                 return `Family History - Subject: ${subject}, Predicate: ${predicate}, Object: ${object}`;
             }).join('\n');
 
+            console.log(fracturesData);
             const fracturesText = fracturesData.map(item => {
-                const fractureType = item.fractureType;
-                const date = item.date;
-                return `Fracture - Type: ${fractureType}, Date: ${date}`;
+                const subject = item.subject;
+                const predicate = item.predicate;
+                const object = item.object;
+                return `Fractures - Subject: ${subject}, Predicate: ${predicate}, Object: ${object}`;
             }).join('\n');
 
             const combinedText = `${familyHistoryText}\n\n${fracturesText}`;
@@ -101,10 +103,9 @@ const RdfDataRender: React.FC = () => {
                 <h2 className="text-xl font-bold mb-4">Fractures</h2>
                 <FracturesTable onDataFetched={setFracturesData} />
             </div>
-
+            <div className="bg-white rounded-lg shadow-md p-4">
             {/* User Input for Asking Question */}
             <div className="mt-6 mb-6">
-                <label htmlFor="question" className="block text-lg font-medium text-gray-700 mb-2">Ask a question based on the data:</label>
 
                 {/* Flex container to align input and button horizontally */}
                 <div className="flex space-x-2">
@@ -114,7 +115,7 @@ const RdfDataRender: React.FC = () => {
                         className="flex-1 mt-1 p-2 border border-gray-300 rounded-lg"
                         value={userQuestion}
                         onChange={(e) => setUserQuestion(e.target.value)} // Handle user input
-                        placeholder="Ask GPT-4 a question based on the data..."
+                        placeholder="Ask! e.g. What is the Child's risk of abuse?"
                     />
                     <button
                         className="bg-black text-white py-2 px-4 rounded shadow-md hover:bg-gray-800"
@@ -125,6 +126,7 @@ const RdfDataRender: React.FC = () => {
                     </button>
                 </div>
                 
+            </div>
             </div>
 
 
