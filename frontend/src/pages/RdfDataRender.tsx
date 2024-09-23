@@ -142,7 +142,7 @@ const RdfDataRender: React.FC = () => {
                         >
                             ✕
                         </button>
-                        <h3 className="text-lg font-bold">Analysis</h3>
+                        <h3 className="text-lg font-bold">Analysing</h3>
 
                         {isChatGPTLoading ? (
                             <div className="flex justify-center">
