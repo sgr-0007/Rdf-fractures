@@ -18,6 +18,11 @@ const FracturesTable: React.FC<FracturesTableProps> = ({ onDataFetched }) => {
         animationData: animationData,
         renderer: 'svg',
     };
+    
+    const getSubject = (value: string) => {
+        const extractedValue = value.split('/').pop();
+        return extractedValue;
+    };
 
     useEffect(() => {
         axios.post('http://localhost:5000/api/fractures/fetch')
@@ -29,8 +34,14 @@ const FracturesTable: React.FC<FracturesTableProps> = ({ onDataFetched }) => {
                     return recordIdA.localeCompare(recordIdB);
                 });
 
+                const fetchedData = response.data.results.bindings.map((item: any) => ({
+                    subject: getSubject(item.subject.value),
+                    predicate: item.mappedPredicate.value,
+                    object: item.mappedObject.value,
+                }));
+
                 setData(sortedData);
-                onDataFetched(sortedData); // Pass data up to parent component
+                onDataFetched(fetchedData); // Pass data up to parent component
                 setLoading(false);
             })
             .catch(error => {
@@ -52,10 +63,6 @@ const FracturesTable: React.FC<FracturesTableProps> = ({ onDataFetched }) => {
         return <div>{error}</div>;
     }
 
-    const getSubject = (value: string) => {
-        const extractedValue = value.split('/').pop();
-        return extractedValue;
-    };
 
     return (
         <div className="bg-white rounded-lg shadow-md overflow-x-auto">

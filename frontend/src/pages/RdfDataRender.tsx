@@ -40,6 +40,7 @@ const RdfDataRender: React.FC = () => {
         setIsModalOpen(true); // Open the modal when loading starts
 
         try {
+            console.log(familyHistoryData);
             // Prepare the data from both tables for GPT-4 by summarizing the tables in text format
             const familyHistoryText = familyHistoryData.map(item => {
                 const subject = item.subject;
